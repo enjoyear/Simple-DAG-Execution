@@ -23,13 +23,12 @@ case class SleepNode(id: String, sleepTimeMillis: Long) extends ExecutableNode {
 }
 
 
-case class ScriptNode(fileName: String) extends ExecutableNode {
+case class ScriptNode(cmd: String) extends ExecutableNode {
 
   private val logger: Logger = LoggerFactory.getLogger(this.getClass)
 
   override def execute(): Int = {
-    logger.info("Executing" + fileName)
-    val cmd: String = s"bash $fileName"
+    logger.info("Executing - " + cmd)
     val ret = cmd !
 
     logger.info(MessageBuilder.build(

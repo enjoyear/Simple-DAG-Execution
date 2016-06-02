@@ -1,7 +1,12 @@
 import sbt.Keys._
 
-name := "Simple-DAG-Execution"
-version := "1.0"
+lazy val appVersion = "1.0"
+
+lazy val appSettings = Seq(
+  name := "simple-dag-execution",
+  version := appVersion
+)
+
 scalaVersion := "2.11.8"
 sbtVersion := "0.13.11"
 
@@ -12,7 +17,12 @@ lazy val testLib = Seq(
 )
 
 lazy val root = Project(id = "root", base = file("."))
+  .settings(appSettings: _*)
+  .aggregate(sde, sdeCommon)
+
+lazy val sde = Project(id = "sde", base = file("sde"))
   .settings(
+    version := appVersion,
     libraryDependencies ++= Seq(
       "com.typesafe" % "config" % "1.2.1",
       "log4j" % "log4j" % "1.2.17",
@@ -20,6 +30,12 @@ lazy val root = Project(id = "root", base = file("."))
       "org.slf4j" % "slf4j-api" % "1.7.21"
     ),
     libraryDependencies ++= testLib
-  )
+  ).dependsOn(sdeCommon % "compile->compile; test->test")
 
+
+lazy val sdeCommon = Project(id = "sde-common", base = file("sde-common"))
+  .settings(
+    version := appVersion,
+    libraryDependencies ++= testLib
+  )
 

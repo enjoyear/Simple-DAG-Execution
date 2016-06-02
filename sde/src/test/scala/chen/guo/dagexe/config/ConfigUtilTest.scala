@@ -1,10 +1,10 @@
 package chen.guo.dagexe.config
 
+import chen.guo.dagexe.common.UnitSpec
 import chen.guo.dagexe.execution.{ExecutableNode, ScriptNode}
 import com.typesafe.config.ConfigFactory
-import org.scalatest.FlatSpec
 
-class ConfigUtilTest extends FlatSpec {
+class ConfigUtilTest extends UnitSpec {
   "getNodeDefConfig" should "work" in {
     val config = ConfigFactory.parseString(
       s"""
