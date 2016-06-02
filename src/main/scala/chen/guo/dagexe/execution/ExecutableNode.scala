@@ -22,7 +22,8 @@ case class SleepNode(id: String, sleepTimeMillis: Long) extends ExecutableNode {
   }
 }
 
-case class BashScriptNode(fileName: String) extends ExecutableNode {
+
+case class ScriptNode(fileName: String) extends ExecutableNode {
 
   private val logger: Logger = LoggerFactory.getLogger(this.getClass)
 
@@ -38,21 +39,3 @@ case class BashScriptNode(fileName: String) extends ExecutableNode {
     ret
   }
 }
-
-case class HqlScriptNode(fileName: String) extends ExecutableNode {
-
-  private val logger: Logger = LoggerFactory.getLogger(this.getClass)
-
-  override def execute(): Int = {
-    logger.info("Executing" + fileName)
-    val cmd: String = s"hive -f $fileName"
-    val ret = cmd !
-
-    logger.info(MessageBuilder.build(
-      s"${getClass.getName} finish with code $ret",
-      "CMD is:" + cmd))
-
-    ret
-  }
-}
-

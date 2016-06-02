@@ -18,7 +18,7 @@ object DAGExecution extends App {
   logger.info(s"Using node definition configuration file at ${args(0)}")
   logger.info(s"Using graph definition configuration file at ${args(1)}")
 
-  private val nodeDefMap: Map[String, Map[String, String]] = getNodeDefConfig(args(0))
+  private val nodeDefMap: Map[String, ExecutableNode] = getNodeDefConfig(args(0))
   private val graphDefMap: Map[String, List[String]] = getGraphDefConfig(args(1))
   checkForCycles(graphDefMap)
 
@@ -47,12 +47,7 @@ object DAGExecution extends App {
         if (leaves(currentJob))
           leaves -= currentJob
 
-        val jobConf = nodeDefMap(currentJob)
-
-        val executable: ExecutableNode =
-          Class.forName(jobConf(KEY_NODE_CLASS))
-            .getDeclaredConstructor(classOf[String])
-            .newInstance(jobConf(KEY_LOCATION)).asInstanceOf[ExecutableNode]
+        val executable = nodeDefMap(currentJob)
 
         syncJobFutureMap(currentJob) = FutureUtil.create(
           //executable,
