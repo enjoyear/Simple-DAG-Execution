@@ -4,7 +4,7 @@ import chen.guo.dagexe.common.UnitSpec
 import chen.guo.dagexe.execution.{ExecutableNode, ScriptNode}
 import com.typesafe.config.ConfigFactory
 
-class ConfigUtilTest extends UnitSpec {
+class ConfigUtilSpec extends UnitSpec {
   "getNodeDefConfig" should "work" in {
     val config = ConfigFactory.parseString(
       s"""

@@ -15,8 +15,8 @@ case class SleepNode(id: String, sleepTimeMillis: Long) extends ExecutableNode {
 
   override def execute(): Int = {
     logger.info(MessageBuilder.build(
-      s"Executing $id at ${Thread.currentThread().getName}",
-      "Sleeping $sleepTimeMillis milli-seconds."))
+      s"Start executing '$id' at ${Thread.currentThread().getName}",
+      s"Sleeping $sleepTimeMillis milli-seconds."))
     Thread.sleep(sleepTimeMillis)
     0
   }
@@ -28,7 +28,7 @@ case class ScriptNode(cmd: String) extends ExecutableNode {
   private val logger: Logger = LoggerFactory.getLogger(this.getClass)
 
   override def execute(): Int = {
-    logger.info("Executing - " + cmd)
+    logger.info("Start executing cmd: " + cmd)
     val ret = cmd !
 
     logger.info(MessageBuilder.build(
