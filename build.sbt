@@ -27,12 +27,13 @@ lazy val sde = Project(id = "sde", base = file("sde"))
     version := appVersion,
     libraryDependencies ++= Seq(
       "com.typesafe" % "config" % "1.2.1",
+      "commons-io" % "commons-io" % "2.5",
       "log4j" % "log4j" % "1.2.17",
       "org.slf4j" % "slf4j-log4j12" % "1.7.21",
       "org.slf4j" % "slf4j-api" % "1.7.21"
     ),
     libraryDependencies ++= testLib
-  ).dependsOn(sdeCommon % "compile->compile; test->test; it->it")
+  ).dependsOn(sdeCommon % "compile->compile; test->test; it->it; it->test")
 
 
 lazy val sdeCommon = Project(id = "sde-common", base = file("sde-common"))

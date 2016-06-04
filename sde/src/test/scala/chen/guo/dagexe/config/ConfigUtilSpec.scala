@@ -1,7 +1,7 @@
 package chen.guo.dagexe.config
 
-import chen.guo.dagexe.common.UnitSpec
 import chen.guo.dagexe.execution.{ExecutableNode, ScriptNode}
+import chen.guo.test.common.UnitSpec
 import com.typesafe.config.ConfigFactory
 
 class ConfigUtilSpec extends UnitSpec {
@@ -10,12 +10,12 @@ class ConfigUtilSpec extends UnitSpec {
       s"""
          |{
          |  prepare1: {
-         |    ARGS = ["bash /Users/chenguo/Simple-DAG-Execution/samples/prepare1.sh"],
+         |    ARGS = ["bash /path/to/script1.sh"],
          |    NODE_CLASS = "chen.guo.dagexe.execution.ScriptNode"
          |  },
          |
          |  prepare2: {
-         |    ARGS = ["bash /Users/chenguo/Simple-DAG-Execution/samples/prepare2.sh"],
+         |    ARGS = ["bash /path/to/script2.sh"],
          |    NODE_CLASS = "chen.guo.dagexe.execution.ScriptNode"
          |  }
          |}
@@ -23,7 +23,7 @@ class ConfigUtilSpec extends UnitSpec {
 
     val conf: Map[String, ExecutableNode] = ConfigUtil.getNodeDefConfig(config)
     assertResult(2)(conf.size)
-    assertResult(ScriptNode("bash /Users/chenguo/Simple-DAG-Execution/samples/prepare1.sh"))(conf("prepare1"))
-    assertResult(ScriptNode("bash /Users/chenguo/Simple-DAG-Execution/samples/prepare2.sh"))(conf("prepare2"))
+    assertResult(ScriptNode("bash /path/to/script1.sh"))(conf("prepare1"))
+    assertResult(ScriptNode("bash /path/to/script2.sh"))(conf("prepare2"))
   }
 }

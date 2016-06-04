@@ -16,18 +16,20 @@ class DAGExecution(nodeDefMap: Map[String, ExecutableNode], graphDefMap: Map[Str
 
   def execute() = {
     checkForCycles(graphDefMap)
+    checkForNodeDefinition(graphDefMap, nodeDefMap)
 
     val syncJobFutureMap: TrieMap[String, Future[Int]] = TrieMap[String, Future[Int]]()
     val (inBoundMap, outBoundMap) = getEdgeCountMap(graphDefMap)
     val syncInBoundMap: TrieMap[String, Int] = TrieMap[String, Int](inBoundMap.toArray: _*)
-    val leaves = new mutable.HashSet[String]()
-    leaves ++= outBoundMap.filter(_._2 == 0).keys
-    logger.info(s"Graph leaves are: $leaves")
+    val immutableLeaves: Iterable[String] = outBoundMap.filter(_._2 == 0).keys
+    val mutableLeaves = new mutable.HashSet[String]()
+    mutableLeaves ++= immutableLeaves
+    logger.info(s"Graph mutableLeaves are: $mutableLeaves")
 
     val lock = this
     val anyWorkDone: AtomicBoolean = new AtomicBoolean(false)
 
-    while (leaves.nonEmpty) {
+    while (mutableLeaves.nonEmpty) {
       val startables: Iterable[String] = syncInBoundMap.filter(_._2 == 0).keys
       logger.info(s"""Startables are: $startables""")
 
@@ -39,8 +41,8 @@ class DAGExecution(nodeDefMap: Map[String, ExecutableNode], graphDefMap: Map[Str
             break
           }
 
-          if (leaves(currentJob))
-            leaves -= currentJob
+          if (mutableLeaves(currentJob))
+            mutableLeaves -= currentJob
 
           syncJobFutureMap(currentJob) = FutureUtil.create(
             nodeDefMap(currentJob),
@@ -71,7 +73,7 @@ class DAGExecution(nodeDefMap: Map[String, ExecutableNode], graphDefMap: Map[Str
       }
     }
 
-    for (leaf <- leaves) {
+    for (leaf <- immutableLeaves) {
       Await.ready(syncJobFutureMap(leaf), scala.concurrent.duration.Duration.Inf)
     }
 
@@ -95,6 +97,11 @@ class DAGExecution(nodeDefMap: Map[String, ExecutableNode], graphDefMap: Map[Str
     (inBounds, outBounds)
   }
 
+  /**
+    * Make sure that there is no cycle in your DAG
+    *
+    * @param graphDefMap
+    */
   private def checkForCycles(graphDefMap: Map[String, List[String]]) = {
 
     val inBounds = new mutable.HashMap[String, Int]()
@@ -125,5 +132,24 @@ class DAGExecution(nodeDefMap: Map[String, ExecutableNode], graphDefMap: Map[Str
       logger.error(s"Detected cycles in your graph definition around ${inBounds.keys.toList.diff(visited.toList).mkString("[", ",", "]")}")
       sys.exit(1)
     }
+  }
+
+  /**
+    * Make sure that all nodes defined in your DAG exists in the NodeDefinition config file
+    *
+    * @param graphDefMap
+    */
+  def checkForNodeDefinition(graphDefMap: Map[String, List[String]], nodeDefMap: Map[String, ExecutableNode]) = {
+    val undefinedNodes: List[String] = graphDefMap.keys.toList.diff(nodeDefMap.keys.toList)
+    if (undefinedNodes.nonEmpty) {
+      logger.error(
+        s"""
+           |Found undefined nodes in your DAG definition.
+           |Undefined nodes are: ${undefinedNodes.mkString("[ `", "` , `", "` ]")}
+          """.stripMargin)
+
+      sys.exit(1)
+    }
+
   }
 }

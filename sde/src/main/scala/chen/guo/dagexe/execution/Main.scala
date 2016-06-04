@@ -1,6 +1,6 @@
 package chen.guo.dagexe.execution
 
-import java.util.Random
+import java.io.File
 
 import chen.guo.dagexe.config.ConfigUtil._
 import org.slf4j.{Logger, LoggerFactory}
@@ -10,11 +10,8 @@ object Main extends App {
   logger.info(s"Using node definition configuration file at ${args(0)}")
   logger.info(s"Using graph definition configuration file at ${args(1)}")
 
-  private val nodeDefMap: Map[String, ExecutableNode] = getNodeDefConfig(args(0))
-  private val graphDefMap: Map[String, List[String]] = getGraphDefConfig(args(1))
+  private val nodeDefMap: Map[String, ExecutableNode] = getNodeDefConfig(new File(args(0)))
+  private val graphDefMap: Map[String, List[String]] = getGraphDefConfig(new File(args(1)))
 
-  private val testingMap: Map[String, SleepNode] =
-    nodeDefMap.map(x => (x._1, SleepNode(x._1, 200 * (new Random().nextInt(7) + 1))))
-
-  new DAGExecution(testingMap, graphDefMap).execute()
+  new DAGExecution(nodeDefMap, graphDefMap).execute()
 }

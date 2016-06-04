@@ -2,7 +2,7 @@ package chen.guo.dagexe.execution
 
 import java.io.File
 
-import chen.guo.dagexe.common.UnitSpec
+import chen.guo.test.common.UnitSpec
 
 class ScriptNodeSpec extends UnitSpec {
   "ScriptNode" should "run bash script" in {
