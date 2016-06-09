@@ -24,7 +24,7 @@ class DAGExecution(nodeDefMap: Map[String, ExecutableNode], graphDefMap: Map[Str
     val immutableLeaves: Iterable[String] = outBoundMap.filter(_._2 == 0).keys
     val mutableLeaves = new mutable.HashSet[String]()
     mutableLeaves ++= immutableLeaves
-    logger.info(s"Graph mutableLeaves are: $mutableLeaves")
+    logger.info(s"Graph Leaves are: $mutableLeaves")
 
     val lock = this
     val anyWorkDone: AtomicBoolean = new AtomicBoolean(false)
