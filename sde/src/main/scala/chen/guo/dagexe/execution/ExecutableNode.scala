@@ -21,7 +21,11 @@ case class SleepNode(id: String, sleepTimeMillis: String) extends ExecutableNode
   }
 }
 
-
+/**
+  * This node will execute a list of commands in order and stops immediately at the first one that fails.
+  *
+  * @param commands a list of bash commands to be executed
+  */
 case class ScriptNode(commands: String*) extends ExecutableNode {
 
   private val logger: Logger = LoggerFactory.getLogger(this.getClass)
@@ -29,30 +33,26 @@ case class ScriptNode(commands: String*) extends ExecutableNode {
   override def execute(): Int = {
     logger.info(s"Start executing: ${this}")
 
-    val exitCodes = commands.map(cmd => {
-      logger.info("Executing: " + cmd)
+    val exitCode = commands.toSeq.foldLeft(0)((lastExit, cmd) =>
+      lastExit match {
+        case 0 =>
+          logger.info("Executing: " + cmd)
 
-      val cmdExitCode = if (cmd.trim == "") 0
-      else Runtime.getRuntime.exec(Array("/bin/bash", "-c", cmd)).waitFor
+          val cmdExitCode = if (cmd.trim == "") 0
+          else Runtime.getRuntime.exec(Array("/bin/bash", "-c", cmd)).waitFor
 
-      logger.info(
-        s"""${getClass.getName} partially finishes with code $cmdExitCode
-           |Current command is: $cmd
-           |Exit code is: $cmdExitCode
-           """.stripMargin)
-      cmdExitCode
-    })
+          logger.info(s"${this} finishes cmd `$cmd` with code $cmdExitCode")
+          cmdExitCode
+        case x => x
+      })
 
-    if (exitCodes.forall(_ == 0)) {
+    if (exitCode == 0)
       logger.info(MessageBuilder.build(
-        s"${getClass.getName} finishes with code 0", s"The node is ${this}"))
-      0
-    }
-    else {
-      val exitCode: Int = exitCodes.filter(_ > 0).head
+        s"${getClass.getName} finishes with code 0", s"Current node is ${this}"))
+    else
       logger.info(MessageBuilder.build(
-        s"${getClass.getName} finishes with code $exitCode", s"The node is ${this}"))
-      exitCode
-    }
+        s"${getClass.getName} finishes with code $exitCode", s"Current node is ${this}"))
+
+    exitCode
   }
 }

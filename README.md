@@ -35,6 +35,7 @@ A simple example
 
 ## ToDo
 ### Features
+-1. Avoid the configuration file. Implement a graph builder and pass the class to the executor.
 0. Allow variable declaration in conf file.
 1. Make start and end of execution configurable.
 2. Make graph node executable depending different exit codes of parents.
@@ -44,4 +45,4 @@ A simple example
 ### Improvements
 1. Add manifest file.
 2. Add parent and children fields to ExecutableNode.
-3. Add test to ScriptNode.
+
