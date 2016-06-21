@@ -4,7 +4,7 @@ import java.io._
 import java.util
 import java.util.concurrent._
 
-import chen.guo.dagexe.execution.SleepNode
+import chen.guo.dagexe.config.SleepNode
 import chen.guo.dagexe.util.MessageBuilder
 import org.slf4j.{Logger, LoggerFactory}
 

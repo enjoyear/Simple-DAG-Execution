@@ -2,6 +2,7 @@ package chen.guo.dagexe.execution
 
 import java.util.concurrent.atomic.AtomicBoolean
 
+import chen.guo.dagexe.config.ExecutableNode
 import chen.guo.dagexe.util.FutureUtil
 import org.slf4j.{Logger, LoggerFactory}
 

@@ -3,6 +3,7 @@ package chen.guo.dagexe.execution
 import java.io.File
 
 import chen.guo.dagexe.config.ConfigUtil._
+import chen.guo.dagexe.config.ExecutableNode
 import chen.guo.util.ErrorUtil
 import com.beust.jcommander.converters.FileConverter
 import com.beust.jcommander.{JCommander, Parameter, ParameterException}

@@ -2,8 +2,8 @@ package chen.guo.ittests
 
 import java.io.File
 
-import chen.guo.dagexe.config.ConfigUtil
-import chen.guo.dagexe.execution.{DAGExecution, ExecutableNode}
+import chen.guo.dagexe.config.{ConfigUtil, ExecutableNode}
+import chen.guo.dagexe.execution.DAGExecution
 import chen.guo.test.common.UnitSpec
 import chen.guo.util.EnvUtil
 

@@ -4,7 +4,6 @@ import java.io.File
 import java.lang.reflect.Constructor
 import java.util
 
-import chen.guo.dagexe.execution.ExecutableNode
 import chen.guo.util.{EnvUtil, ErrorUtil}
 import com.typesafe.config.{Config, ConfigFactory, ConfigObject}
 import org.apache.commons.io.FileUtils

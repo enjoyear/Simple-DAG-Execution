@@ -1,6 +1,5 @@
 package chen.guo.dagexe.config
 
-import chen.guo.dagexe.execution.{ExecutableNode, ScriptNode}
 import chen.guo.test.common.UnitSpec
 import com.typesafe.config.ConfigFactory
 
@@ -11,12 +10,12 @@ class ConfigUtilSpec extends UnitSpec {
          |{
          |  prepare1: {
          |    ARGS = ["bash /path/to/script1.sh"],
-         |    NODE_CLASS = "chen.guo.dagexe.execution.ScriptNode"
+         |    NODE_CLASS = "chen.guo.dagexe.config.ScriptNode"
          |  },
          |
          |  prepare2: {
          |    ARGS = ["bash /path/to/script2.sh"],
-         |    NODE_CLASS = "chen.guo.dagexe.execution.ScriptNode"
+         |    NODE_CLASS = "chen.guo.dagexe.config.ScriptNode"
          |  }
          |}
        """.stripMargin)

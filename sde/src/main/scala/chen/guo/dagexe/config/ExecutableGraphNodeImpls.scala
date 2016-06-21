@@ -1,25 +1,7 @@
-package chen.guo.dagexe.execution
+package chen.guo.dagexe.config
 
 import chen.guo.dagexe.util.MessageBuilder
 import org.slf4j.{Logger, LoggerFactory}
-
-trait ExecutableNode {
-  def execute(): Int
-}
-
-case class SleepNode(id: String, sleepTimeMillis: String) extends ExecutableNode {
-
-  private val logger: Logger = LoggerFactory.getLogger(this.getClass)
-  val sleepTime = sleepTimeMillis.toLong
-
-  override def execute(): Int = {
-    logger.info(MessageBuilder.build(
-      s"Start executing '$id' at ${Thread.currentThread().getName}",
-      s"Sleeping $sleepTime milli-seconds."))
-    Thread.sleep(sleepTime)
-    0
-  }
-}
 
 /**
   * This node will execute a list of commands in order and stops immediately at the first one that fails.
@@ -54,5 +36,19 @@ case class ScriptNode(commands: String*) extends ExecutableNode {
         s"${getClass.getName} finishes with code $exitCode", s"Current node is ${this}"))
 
     exitCode
+  }
+}
+
+case class SleepNode(id: String, sleepTimeMillis: String) extends ExecutableNode {
+
+  private val logger: Logger = LoggerFactory.getLogger(this.getClass)
+  val sleepTime = sleepTimeMillis.toLong
+
+  override def execute(): Int = {
+    logger.info(MessageBuilder.build(
+      s"Start executing '$id' at ${Thread.currentThread().getName}",
+      s"Sleeping $sleepTime milli-seconds."))
+    Thread.sleep(sleepTime)
+    0
   }
 }

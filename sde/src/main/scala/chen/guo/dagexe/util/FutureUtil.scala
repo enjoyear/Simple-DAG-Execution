@@ -1,6 +1,6 @@
 package chen.guo.dagexe.util
 
-import chen.guo.dagexe.execution.ExecutableNode
+import chen.guo.dagexe.config.ExecutableNode
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.concurrent.ExecutionContext.Implicits.global

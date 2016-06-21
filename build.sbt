@@ -29,7 +29,6 @@ lazy val sde = Project(id = "sde", base = file("sde"))
     libraryDependencies ++= Seq(
       "com.typesafe" % "config" % "1.2.1",
       "commons-io" % "commons-io" % "2.5",
-      "log4j" % "log4j" % "1.2.17",
       "org.slf4j" % "slf4j-log4j12" % "1.7.21",
       "org.slf4j" % "slf4j-api" % "1.7.21",
       "com.beust" % "jcommander" % "1.48"

@@ -1,5 +1,6 @@
 package chen.guo.dagexe.execution
 
+import chen.guo.dagexe.config.ScriptNode
 import chen.guo.test.common.UnitSpec
 
 class ScriptNodeSpec extends UnitSpec {
