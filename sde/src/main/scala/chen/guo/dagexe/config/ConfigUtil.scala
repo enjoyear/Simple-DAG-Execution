@@ -18,12 +18,12 @@ object ConfigUtil {
   final val KEY_ARGS = "ARGS"
   final val KEY_NODE_CLASS = "NODE_CLASS"
 
-  def getNodeDefConfig(nodeDefFile: File): Map[String, ExecutableNode] = {
+  def getNodeDefConfig(nodeDefFile: File): Map[String, ExecutableItem] = {
     val scriptConfig: Config = ConfigFactory.parseString(getDereferenceString(nodeDefFile))
     getNodeDefConfig(scriptConfig)
   }
 
-  def getNodeDefConfig(scriptConfig: Config): Map[String, ExecutableNode] = {
+  def getNodeDefConfig(scriptConfig: Config): Map[String, ExecutableItem] = {
     scriptConfig.root.entrySet().asScala.map(x => x.getKey -> {
       val config = x.getValue.asInstanceOf[ConfigObject]
 
@@ -37,11 +37,11 @@ object ConfigUtil {
         Try {
           //First try the constructor that accepts a variable list of arguments
           val constructor: Constructor[_] = nodeClass.getDeclaredConstructor(classOf[Seq[String]])
-          constructor.newInstance(args.asScala).asInstanceOf[ExecutableNode]
+          constructor.newInstance(args.asScala).asInstanceOf[ExecutableItem]
         }.getOrElse {
           //Then try the constructor that accepts a fixed number of arguments
           val constructor: Constructor[_] = nodeClass.getDeclaredConstructor(constructorType.toArray: _*)
-          constructor.newInstance(args.toArray: _*).asInstanceOf[ExecutableNode]
+          constructor.newInstance(args.toArray: _*).asInstanceOf[ExecutableItem]
         }
       }
       catch {

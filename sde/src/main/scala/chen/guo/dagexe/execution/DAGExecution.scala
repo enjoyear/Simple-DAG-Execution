@@ -2,7 +2,7 @@ package chen.guo.dagexe.execution
 
 import java.util.concurrent.atomic.AtomicBoolean
 
-import chen.guo.dagexe.config.ExecutableNode
+import chen.guo.dagexe.config.ExecutableItem
 import chen.guo.dagexe.util.FutureUtil
 import org.slf4j.{Logger, LoggerFactory}
 
@@ -11,7 +11,7 @@ import scala.collection.mutable
 import scala.concurrent.{Await, Future}
 import scala.util.control.Breaks._
 
-class DAGExecution(nodeDefMap: Map[String, ExecutableNode], graphDefMap: Map[String, List[String]]) {
+class DAGExecution(nodeDefMap: Map[String, ExecutableItem], graphDefMap: Map[String, List[String]]) {
 
   private val logger: Logger = LoggerFactory.getLogger(this.getClass)
 
@@ -140,7 +140,7 @@ class DAGExecution(nodeDefMap: Map[String, ExecutableNode], graphDefMap: Map[Str
     *
     * @param graphDefMap
     */
-  def checkForNodeDefinition(graphDefMap: Map[String, List[String]], nodeDefMap: Map[String, ExecutableNode]) = {
+  def checkForNodeDefinition(graphDefMap: Map[String, List[String]], nodeDefMap: Map[String, ExecutableItem]) = {
     val undefinedNodes: List[String] = graphDefMap.keys.toList.diff(nodeDefMap.keys.toList)
     if (undefinedNodes.nonEmpty) {
       logger.error(

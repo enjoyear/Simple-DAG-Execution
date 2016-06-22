@@ -2,7 +2,7 @@ package chen.guo.ittests
 
 import java.io.File
 
-import chen.guo.dagexe.config.{ConfigUtil, ExecutableNode}
+import chen.guo.dagexe.config.{ConfigUtil, ExecutableItem}
 import chen.guo.dagexe.execution.DAGExecution
 import chen.guo.test.common.UnitSpec
 import chen.guo.util.EnvUtil
@@ -16,7 +16,7 @@ class StaticGraphExecutionOrderSpec extends UnitSpec {
     val graphDefFile = getResourceFile("test-support/StaticGraphExecutionOrderSpec/GraphDef.conf")
     val nodeDefFile = getResourceFile("test-support/StaticGraphExecutionOrderSpec/NodeDef.conf")
 
-    val nodeDefMap: Map[String, ExecutableNode] = ConfigUtil.getNodeDefConfig(nodeDefFile)
+    val nodeDefMap: Map[String, ExecutableItem] = ConfigUtil.getNodeDefConfig(nodeDefFile)
     val graphDefMap: Map[String, List[String]] = ConfigUtil.getGraphDefConfig(graphDefFile)
 
     new DAGExecution(nodeDefMap, graphDefMap).execute()

@@ -8,7 +8,7 @@ import org.slf4j.{Logger, LoggerFactory}
   *
   * @param commands a list of bash commands to be executed
   */
-case class ScriptNode(commands: String*) extends ExecutableNode {
+case class ShellNode(commands: String*) extends DirectedExecutableItem {
 
   private val logger: Logger = LoggerFactory.getLogger(this.getClass)
 
@@ -39,7 +39,7 @@ case class ScriptNode(commands: String*) extends ExecutableNode {
   }
 }
 
-case class SleepNode(id: String, sleepTimeMillis: String) extends ExecutableNode {
+case class SleepNode(id: String, sleepTimeMillis: String) extends DirectedExecutableItem {
 
   private val logger: Logger = LoggerFactory.getLogger(this.getClass)
   val sleepTime = sleepTimeMillis.toLong

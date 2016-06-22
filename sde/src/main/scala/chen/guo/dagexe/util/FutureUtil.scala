@@ -1,6 +1,6 @@
 package chen.guo.dagexe.util
 
-import chen.guo.dagexe.config.ExecutableNode
+import chen.guo.dagexe.config.ExecutableItem
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -11,7 +11,7 @@ object FutureUtil {
 
   private val logger: Logger = LoggerFactory.getLogger(FutureUtil.getClass)
 
-  def create(en: ExecutableNode,
+  def create(en: ExecutableItem,
              beforeExecution: Option[() => Unit] = None,
              afterSuccessfulExecution: Option[() => Unit] = None
             ): Future[Int] = {
@@ -22,7 +22,7 @@ object FutureUtil {
     f
   }
 
-  def concatenate(en: ExecutableNode, dependency: Future[Int],
+  def concatenate(en: ExecutableItem, dependency: Future[Int],
                   beforeExecution: Option[() => Unit] = None,
                   afterSuccessfulExecution: Option[() => Unit] = None
                  ): Future[Int] = {
@@ -38,14 +38,14 @@ object FutureUtil {
     concatenated
   }
 
-  def fork(forkEns: List[ExecutableNode], dependency: Future[Int],
+  def fork(forkEns: List[ExecutableItem], dependency: Future[Int],
            beforeExecution: Option[() => Unit] = None,
            afterSuccessfulExecution: Option[() => Unit] = None
           ): List[Future[Int]] = {
     forkEns.map(s => concatenate(s, dependency, beforeExecution, afterSuccessfulExecution))
   }
 
-  def merge(en: ExecutableNode, dependencies: List[Future[Int]],
+  def merge(en: ExecutableItem, dependencies: List[Future[Int]],
             beforeExecution: Option[() => Unit] = None,
             afterSuccessfulExecution: Option[() => Unit] = None
            ): Future[Int] = {
@@ -62,14 +62,14 @@ object FutureUtil {
     merged
   }
 
-  def mergeFork(forkEns: List[ExecutableNode], dependencies: List[Future[Int]],
+  def mergeFork(forkEns: List[ExecutableItem], dependencies: List[Future[Int]],
                 beforeExecution: Option[() => Unit] = None,
                 afterSuccessfulExecution: Option[() => Unit] = None
                ): List[Future[Int]] = {
     forkEns.map(s => merge(s, dependencies, beforeExecution, afterSuccessfulExecution))
   }
 
-  private def runExecutable(executable: ExecutableNode, beforeExecution: Option[() => Unit], afterSuccessfulExecution: Option[() => Unit]): Int = {
+  private def runExecutable(executable: ExecutableItem, beforeExecution: Option[() => Unit], afterSuccessfulExecution: Option[() => Unit]): Int = {
     beforeExecution match {
       case Some(runnable) =>
         logger.info(s"Executing preparation step for $executable")
@@ -91,7 +91,7 @@ object FutureUtil {
     ret
   }
 
-  private def addDefaultCallbacks(f: Future[Int], executable: ExecutableNode): Unit = {
+  private def addDefaultCallbacks(f: Future[Int], executable: ExecutableItem): Unit = {
     //served as side effects
     f.onSuccess {
       case 0 =>

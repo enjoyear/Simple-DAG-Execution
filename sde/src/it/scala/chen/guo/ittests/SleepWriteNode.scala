@@ -1,7 +1,6 @@
 package chen.guo.ittests
 
 import java.io._
-import java.util
 import java.util.concurrent._
 
 import chen.guo.dagexe.config.SleepNode
